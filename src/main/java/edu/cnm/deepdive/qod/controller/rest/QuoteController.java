@@ -91,6 +91,15 @@ public class QuoteController {
   public Quote put(@PathVariable UUID id, @RequestBody Quote modifiedQuote) {
     Quote quote = quoteRepository.findOrFail(id);
     quote.setText(modifiedQuote.getText());
+
+    Source source = modifiedQuote.getSource();
+    if (source != null) {
+      UUID sourceId = source.getId();
+      if (sourceId != null) {
+        source = sourceRepository.findOrFail(sourceId);
+      }
+    }
+    quote.setSource(source);
     return quoteRepository.save(quote);
   }
 
